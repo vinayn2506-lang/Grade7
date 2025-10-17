@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satyam International School - Performance Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+        .main-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .animated-gradient {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .mind-map-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin: 2rem 0;
+        }
+        .mind-map-center {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border: 3px solid white;
+        }
+        .mind-map-node {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border: 2px solid white;
+        }
+        .mind-map-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+        /* Positions for 7 nodes */
+        .node-1 { transform: translate(150px, -150px); background: linear-gradient(135deg, #ff758c, #ff7eb3); }
+        .node-2 { transform: translate(220px, 0px); background: linear-gradient(135deg, #f58232, #f9a825); }
+        .node-3 { transform: translate(150px, 150px); background: linear-gradient(135deg, #00b09b, #96c93d); }
+        .node-4 { transform: translate(0px, 220px); background: linear-gradient(135deg, #2193b0, #6dd5ed); }
+        .node-5 { transform: translate(-150px, 150px); background: linear-gradient(135deg, #cc2b5e, #753a88); }
+        .node-6 { transform: translate(-220px, 0px); background: linear-gradient(135deg, #fc466b, #3f5efb); }
+        .node-7 { transform: translate(-150px, -150px); background: linear-gradient(135deg, #4776e6, #8e54e9); }
+        
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .topper-card {
+             background: rgba(255, 255, 255, 0.2);
+             border-left: 5px solid rgba(255, 255, 255, 0.7);
+             transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .topper-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        select {
+             -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <canvas id="confetti-canvas"></canvas>
+    <div id="app-container" class="w-full max-w-7xl mx-auto">
+        <!-- Selection View -->
+        <div id="selection-view" class="animated-gradient rounded-2xl shadow-2xl p-8 md:p-12 text-white">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Left side: Welcome & Selection -->
+                <div class="text-center md:text-left">
+                    <img src="https://placehold.co/100x100/ffffff/667eea?text=SIS" alt="School Logo" class="mx-auto md:mx-0 mb-4 rounded-full border-4 border-white shadow-lg">
+                    <h1 class="text-3xl md:text-5xl font-bold mb-2 tracking-wide text-shadow">SATYAM INTERNATIONAL SCHOOL</h1>
+                    <p class="text-xl md:text-2xl opacity-90">BALLARI (ELITE BLOCK)</p>
+                    <div class="mt-6 text-lg md:text-xl opacity-80">
+                        <p>Grade 7 - Elite Block</p>
+                        <p>Class Teacher: Ms. Suchitra</p>
+                    </div>
+                    <div class="mt-10 max-w-lg mx-auto md:mx-0">
+                        <label for="student-select" class="sr-only">Select Your Child's Name</label>
+                        <select id="student-select" class="w-full p-4 rounded-xl text-lg text-gray-800 border-2 border-transparent focus:ring-4 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                            <option value="">-- Select Your Child's Name --</option>
+                        </select>
+                        <button id="enter-btn" class="mt-6 w-full bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-4 px-8 rounded-xl text-xl transition transform hover:scale-105 shadow-lg">
+                            View Performance Report
+                        </button>
+                    </div>
+                </div>
+                <!-- Right side: Toppers -->
+                <div class="card rounded-xl p-6">
+                     <h2 class="text-3xl font-bold text-center mb-4 text-indigo-700">Class Achievers</h2>
+                     <div id="toppers-list" class="space-y-3 text-left"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report View -->
+        <div id="report-view" class="hidden">
+             <button id="back-btn" class="fixed top-4 left-4 bg-white/30 hover:bg-white/50 text-white font-bold py-2 px-4 rounded-full z-20 backdrop-blur-sm">
+                &larr; Back
+            </button>
+            <div class="main-container rounded-2xl shadow-2xl p-6 md:p-10 text-white relative overflow-hidden">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold" id="student-name-header"></h1>
+                    <p class="text-lg opacity-90">Summative Assessment-1 (2025-26) Performance Report</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Panel -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="card rounded-xl p-6 text-gray-800">
+                            <h2 class="text-2xl font-bold text-center mb-4 text-indigo-600">Overall Performance</h2>
+                             <p class="text-center text-sm text-gray-500 mb-4">(Based on 6 core subjects)</p>
+                            <div class="flex justify-around text-center">
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-600">Grade</p>
+                                    <p class="text-4xl font-bold text-indigo-600" id="overall-grade"></p>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-600">Percentage</p>
+                                    <p class="text-4xl font-bold text-indigo-600" id="overall-percentage"></p>
+                                </div>
+                                 <div>
+                                    <p class="text-lg font-semibold text-gray-600">Rank</p>
+                                    <p class="text-4xl font-bold text-indigo-600" id="overall-rank"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="card rounded-xl p-6 text-gray-800">
+                            <h2 class="text-2xl font-bold text-center mb-4 text-indigo-600">Teacher's Remarks</h2>
+                            <div>
+                                <h3 class="font-bold text-lg text-blue-600 mb-2">General Remarks</h3>
+                                <p id="remarks-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Panel - Mind Map -->
+                    <div class="lg:col-span-2 card rounded-xl p-6 text-gray-800">
+                        <h2 class="text-2xl font-bold text-center mb-2 text-indigo-600">Interactive Subject Analysis</h2>
+                        <div class="mind-map-container">
+                             <div class="mind-map-center">Academic Performance</div>
+                        </div>
+                         <div class="text-center text-gray-600 -mt-8">Click on a subject to see details</div>
+                    </div>
+                </div>
+                 <div class="mt-8 card rounded-xl p-6 text-gray-800">
+                     <h2 class="text-2xl font-bold text-center mb-4 text-indigo-600">Performance Analysis</h2>
+                    <div class="grid md:grid-cols-2 gap-6 text-center">
+                        <div>
+                            <h3 class="font-bold text-lg text-green-600 mb-2">Strengths</h3>
+                            <p id="strengths-text"></p>
+                        </div>
+                         <div>
+                            <h3 class="font-bold text-lg text-red-500 mb-2">Areas for Improvement</h3>
+                            <p id="improvement-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for subject details -->
+    <div id="subject-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
+        <div id="modal-content" class="card rounded-2xl p-8 text-gray-800 w-full max-w-md mx-auto transform scale-95 transition-transform duration-300">
+            <h2 id="modal-subject" class="text-3xl font-bold text-center mb-4"></h2>
+            <div class="text-center space-y-4">
+                <div>
+                     <p class="text-lg font-semibold text-gray-600">Marks Scored</p>
+                    <p id="modal-marks" class="text-5xl font-bold"></p>
+                </div>
+                 <div>
+                     <p class="text-lg font-semibold text-gray-600">Grade</p>
+                    <p id="modal-grade" class="text-4xl font-bold"></p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-700">Remarks:</h4>
+                    <p id="modal-remarks" class="text-gray-600"></p>
+                </div>
+            </div>
+            <button id="close-modal-btn" class="absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xl">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        // Data has been meticulously re-verified against the source PDF (New Doc 10-17-2025 12.52 (1).pdf) and user's ranking instructions.
+        // A syntax error in this data array was fixed to ensure the script runs correctly.
+        const allStudents = [
+            { id: 1, name: "Ankur Omprakash Suryawanshi", marks: { English: { score: 79, grade: "A1" }, Hindi: { score: 79, grade: "A1" }, Kannada: { score: 79, grade: "A1" }, Maths: { score: 80, grade: "A1" }, Science: { score: 80, grade: "A1" }, Social: { score: 80, grade: "A1" }, Comp: { score: 80, grade: "A1" } }, total: 477, percentage: "99.38%", overallGrade: "A1", rank: 1 },
+            { id: 2, name: "Niteesh Kumar GK", marks: { English: { score: 79, grade: "A1" }, Hindi: { score: 79, grade: "A1" }, Kannada: { score: 79, grade: "A1" }, Maths: { score: 80, grade: "A1" }, Science: { score: 80, grade: "A1" }, Social: { score: 80, grade: "A1" }, Comp: { score: 80, grade: "A1" } }, total: 477, percentage: "99.38%", overallGrade: "A1", rank: 2 },
+            { id: 3, name: "Avikshita K", marks: { English: { score: 74, grade: "A1" }, Hindi: { score: 79, grade: "A1" }, Kannada: { score: 79, grade: "A1" }, Maths: { score: 78, grade: "A1" }, Science: { score: 80, grade: "A1" }, Social: { score: 80, grade: "A1" }, Comp: { score: 78, grade: "A1" } }, total: 469, percentage: "98.12%", overallGrade: "A1", rank: 2 },
+            { id: 4, name: "VR Hyndavi", marks: { English: { score: 76, grade: "A1" }, Hindi: { score: 78, grade: "A1" }, Kannada: { score: 78, grade: "A1" }, Maths: { score: 79, grade: "A1" }, Science: { score: 80, grade: "A1" }, Social: { score: 80, grade: "A1" }, Comp: { score: 79, grade: "A1" } }, total: 471, percentage: "97.71%", overallGrade: "A1", rank: 3 },
+            { id: 5, name: "Ananya C", marks: { English: { score: 77, grade: "A1" }, Hindi: { score: 79, grade: "A1" }, Kannada: { score: 73, grade: "A1" }, Maths: { score: 78, grade: "A1" }, Science: { score: 75, grade: "A1" }, Social: { score: 78, grade: "A1" }, Comp: { score: 75, grade: "A1" } }, total: 461, percentage: "96.04%", overallGrade: "A1", rank: 3 },
+            { id: 6, name: "Aditi Prasad B", marks: { English: { score: 76, grade: "A1" }, Hindi: { score: 76, grade: "A1" }, Kannada: { score: 74, grade: "A1" }, Maths: { score: 74, grade: "A1" }, Science: { score: 80, grade: "A1" }, Social: { score: 78, grade: "A1" }, Comp: { score: 76, grade: "A1" } }, total: 458, percentage: "95.42%", overallGrade: "A1", rank: 4 },
+            { id: 7, name: "Indhu M", marks: { English: { score: 76, grade: "A1" }, Hindi: { score: 78, grade: "A1" }, Kannada: { score: 77, grade: "A1" }, Maths: { score: 67, grade: "A2" }, Science: { score: 73, grade: "A1" }, Social: { score: 71, grade: "A2" }, Comp: { score: 79, grade: "A1" } }, total: 451, percentage: "93.96%", overallGrade: "A1", rank: 5 },
+            { id: 8, name: "HG Shifa Naaz", marks: { English: { score: 77, grade: "A1" }, Hindi: { score: 79, grade: "A1" }, Kannada: { score: 76, grade: "A1" }, Maths: { score: 76, grade: "A1" }, Science: { score: 75, grade: "A1" }, Social: { score: 75, grade: "A1" }, Comp: { score: 77, grade: "A1" } }, total: 450, percentage: "93.75%", overallGrade: "A1", rank: 5 },
+            { id: 9, name: "Jaanavi K", marks: { English: { score: 74, grade: "A1" }, Hindi: { score: 71, grade: "A2" }, Kannada: { score: 76, grade: "A1" }, Maths: { score: 73, grade: "A1" }, Science: { score: 75, grade: "A1" }, Social: { score: 79, grade: "A1" }, Comp: { score: 75, grade: "A1" } }, total: 443, percentage: "93.33%", overallGrade: "A1", rank: 6 },
+            { id: 10, name: "BR Nainika", marks: { English: { score: 79, grade: "A1" }, Hindi: { score: 75, grade: "A1" }, Kannada: { score: 74, grade: "A1" }, Maths: { score: 65, grade: "A2" }, Science: { score: 75, grade: "A1" }, Social: { score: 75, grade: "A1" }, Comp: { score: 63, grade: "B1" } }, total: 443, percentage: "92.29%", overallGrade: "A1", rank: 7 },
+            { id: 11, name: "Sanjeev Datta M D", marks: { English: { score: 69, grade: "A2" }, Hindi: { score: 74, grade: "A1" }, Kannada: { score: 69, grade: "A2" }, Maths: { score: 78, grade: "A1" }, Science: { score: 75, grade: "A1" }, Social: { score: 71, grade: "A2" }, Comp: { score: 68, grade: "A2" } }, total: 436, percentage: "90.83%", overallGrade: "A2", rank: 8 },
+            { id: 12, name: "Shreyans Reddy P", marks: { English: { score: 77, grade: "A1" }, Hindi: { score: 68, grade: "A2" }, Kannada: { score: 65, grade: "A2" }, Maths: { score: 77, grade: "A1" }, Science: { score: 75, grade: "A1" }, Social: { score: 70, grade: "A2" }, Comp: { score: 55, grade: "B2" } }, total: 432, percentage: "90.00%", overallGrade: "A2", rank: 9 },
+            { id: 13, name: "Sinchana", marks: { English: { score: 71, grade: "A2" }, Hindi: { score: 67, grade: "A2" }, Kannada: { score: 73, grade: "A1" }, Maths: { score: 72, grade: "A2" }, Science: { score: 70, grade: "A2" }, Social: { score: 75, grade: "A1" }, Comp: { score: 72, grade: "A2" } }, total: 428, percentage: "89.17%", overallGrade: "A2", rank: 10 },
+            { id: 14, name: "R Sanvi", marks: { English: { score: 70, grade: "A2" }, Hindi: { score: 70, grade: "A2" }, Kannada: { score: 70, grade: "A2" }, Maths: { score: 50, grade: "B2" }, Science: { score: 70, grade: "A2" }, Social: { score: 74, grade: "A1" }, Comp: { score: 57, grade: "B1" } }, total: 404, percentage: "84.17%", overallGrade: "A2", rank: 11 },
+            { id: 15, name: "K Rohith", marks: { English: { score: 73, grade: "A1" }, Hindi: { score: 66, grade: "A2" }, Kannada: { score: 59, grade: "B1" }, Maths: { score: 69, grade: "A2" }, Science: { score: 60, grade: "B1" }, Social: { score: 72, grade: "A2" }, Comp: { score: 43, grade: "C1" } }, total: 399, percentage: "83.12%", overallGrade: "A2", rank: 12 },
+            { id: 16, name: "Nikhil PR", marks: { English: { score: 74, grade: "A1" }, Hindi: { score: 61, grade: "B1" }, Kannada: { score: 55, grade: "B2" }, Maths: { score: 75, grade: "A1" }, Science: { score: 63, grade: "B1" }, Social: { score: 71, grade: "A2" }, Comp: { score: 57, grade: "B1" } }, total: 399, percentage: "83.12%", overallGrade: "A2", rank: 13 },
+            { id: 17, name: "Shreya Hugar", marks: { English: { score: 70, grade: "A2" }, Hindi: { score: 69, grade: "A2" }, Kannada: { score: 67, grade: "A2" }, Maths: { score: 48, grade: "C1" }, Science: { score: 67, grade: "A2" }, Social: { score: 63, grade: "B1" }, Comp: { score: 67, grade: "A2" } }, total: 384, percentage: "80.00%", overallGrade: "B1", rank: 14 },
+            { id: 18, name: "Kushal Sai P", marks: { English: { score: 54, grade: "B2" }, Hindi: { score: 63, grade: "B1" }, Kannada: { score: 63, grade: "B1" }, Maths: { score: 62, grade: "B1" }, Science: { score: 64, grade: "B1" }, Social: { score: 75, grade: "A1" }, Comp: { score: 61, grade: "B1" } }, total: 381, percentage: "79.38%", overallGrade: "B1", rank: 15 },
+            { id: 19, name: "Nyumaa Sushal G S", marks: { English: { score: 66, grade: "A2" }, Hindi: { score: 56, grade: "B2" }, Kannada: { score: 55, grade: "B2" }, Maths: { score: 74, grade: "A1" }, Science: { score: 63, grade: "B1" }, Social: { score: 65, grade: "A2" }, Comp: { score: 57, grade: "B1" } }, total: 379, percentage: "78.96%", overallGrade: "B1", rank: 16 },
+            { id: 20, name: "Noor Mahammed", marks: { English: { score: 66, grade: "A2" }, Hindi: { score: 73, grade: "A1" }, Kannada: { score: 52, grade: "B2" 
