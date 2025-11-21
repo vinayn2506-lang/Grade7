@@ -1,0 +1,61 @@
+graph TD
+    %% GLOBAL STYLES
+    classDef main fill:#2c3e50,stroke:#fff,stroke-width:4px,color:#fff,font-size:20px;
+    classDef asexual fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff;
+    classDef sexual fill:#8e44ad,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef plants fill:#27ae60,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef humans fill:#2980b9,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef health fill:#c0392b,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef note fill:#f1c40f,stroke:#f39c12,stroke-width:1px,color:#000,stroke-dasharray: 5 5;
+
+    %% CORE
+    Start(REPRODUCTION<br/>Creating new individuals) --> Why{Why Reproduce?};
+    Why --> |Stability of Species| Species[Survival against Niche Changes <br/> e.g. Bacteria vs Heat]:::note;
+    Start --> Mechanism[<b>DNA Copying</b><br/>Errors in copying = VARIATION]:::main;
+    Mechanism --> Asexual((Asexual Reproduction)):::asexual;
+    Mechanism --> Sexual((Sexual Reproduction)):::sexual;
+
+    %% ASEXUAL BRANCH
+    Asexual -->|Single Parent| A1[No Gametes / Exact Copies];
+    A1 --> Fission[<b>Fission</b><br/>Splitting]:::asexual;
+    Fission -.-> Bin(Binary: Amoeba):::asexual;
+    Fission -.-> Mul(Multiple: Plasmodium):::asexual;
+    
+    A1 --> Frag[<b>Fragmentation</b><br/>Break & Grow<br/>Spirogyra]:::asexual;
+    A1 --> Regen[<b>Regeneration</b><br/>Cut & Regrow<br/>Planaria/Hydra]:::asexual;
+    A1 --> Budd[<b>Budding</b><br/>Outgrowth detaches<br/>Hydra/Yeast]:::asexual;
+    A1 --> Veg[<b>Vegetative Propagation</b><br/>Root/Stem/Leaf<br/>Bryophyllum/Rose]:::asexual;
+    A1 --> Spore[<b>Spore Formation</b><br/>Blob-on-stick<br/>Rhizopus]:::asexual;
+
+    %% SEXUAL BRANCH
+    Sexual -->|Two Parents| S1[Gametes Fuse = <b>More Variation</b>];
+    S1 --> Plants(Flowering Plants):::plants;
+    S1 --> Humans(Human Beings):::humans;
+
+    %% PLANTS SUB-BRANCH
+    Plants --> Flower[Reproductive Part: FLOWER];
+    Flower --> Male[<b>Stamen</b><br/>Anther + Filament<br/>Makes Pollen]:::plants;
+    Flower --> Female[<b>Pistil</b><br/>Stigma + Style + Ovary<br/>Makes Egg]:::plants;
+    Male & Female --> Pollination[<b>Pollination</b><br/>Transfer of Pollen];
+    Pollination --> Fert[<b>Fertilization</b><br/>Male + Female Germ Cells fuse];
+    Fert --> Result[Zygote -> Embryo<br/>Ovule -> Seed<br/>Ovary -> Fruit]:::plants;
+
+    %% HUMANS SUB-BRANCH
+    Humans --> Puberty[<b>Puberty</b><br/>Sexual Maturation];
+    Puberty --> Msys[<b>Male System</b><br/>Testis: Sperm + Testosterone<br/>Vas Deferens: Tube<br/>Urethra: Exit]:::humans;
+    Puberty --> Fsys[<b>Female System</b><br/>Ovary: Egg + Estrogen<br/>Oviduct: Fertilization Site<br/>Uterus: Baby grows]:::humans;
+    
+    Msys & Fsys --> Conception{Sperm meets Egg};
+    Conception -->|Yes| Pregnant[<b>Pregnancy</b><br/>Placenta feeds Embryo<br/>Gestation: 9 months]:::humans;
+    Conception -->|No| Menst[<b>Menstruation</b><br/>Lining breaks down<br/>Blood/Mucus]:::humans;
+
+    %% HEALTH SUB-BRANCH
+    Humans --> Health(Reproductive Health):::health;
+    Health --> STDs[<b>STDs</b><br/>Bacterial: Syphilis<br/>Viral: HIV-AIDS/Warts]:::health;
+    Health --> Contra[<b>Contraception</b><br/>Barriers: Condom<br/>Chemical: Pills<br/>IUCD: Copper-T<br/>Surgery: Vasectomy]:::health;
+
+    %% CITATIONS
+    linkStyle default stroke-width:2px,fill:none,stroke:#333;
+    subgraph Sources
+    Ref[Based on NCERT Chapter 7, Pages 114-125]:::note
+    end
